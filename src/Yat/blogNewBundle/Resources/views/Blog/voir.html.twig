@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>
+            Bienvenue sur ma prière page avec le Site du Zéro!
+        </title>
+    </head>
+    <body>
+        <h1>Lecture d'un article </h1>
+        <p>
+            {# On affiche tous les messages flash dont le nom est info #}
+            {% for message in  app.session.flashbag.get('info') %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </p>
+        <p>
+            Ici nous pouvons lire l'article ayant pour id : {{ id }} <br />
+        </p>
+        <footer>
+            Responsable du blog : {{ webmaster }}.
+        </footer>
+    </body>
+</html>
