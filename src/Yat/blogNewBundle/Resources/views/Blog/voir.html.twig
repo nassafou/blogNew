@@ -1,22 +1,26 @@
-<html>
-    <head>
-        <title>
-            Bienvenue sur ma prière page avec le Site du Zéro!
-        </title>
-    </head>
-    <body>
-        <h1>Lecture d'un article </h1>
-        <p>
-            {# On affiche tous les messages flash dont le nom est info #}
-            {% for message in  app.session.flashbag.get('info') %}
-                <p>{{ message }}</p>
-            {% endfor %}
-        </p>
-        <p>
-            Ici nous pouvons lire l'article ayant pour id : {{ id }} <br />
-        </p>
-        <footer>
-            Responsable du blog : {{ webmaster }}.
-        </footer>
-    </body>
-</html>
+{% extends "BlogNewBundle::layout.html.twig" %}
+{% block title %}
+    Lecture d'un article - {{ parent() }}
+{% endblock %}
+{% block yatblog_body %}
+<h2>{{ article.titre }}</h2>
+<i> Par {{ article.auteur }}, le {{ article.date|date('d/m/Y') }}</i>
+<div class="well">
+{{ article.auteur }}
+</div>
+<p>
+    <a href="{{ path('yatblog_accueil')}}" class="btn">
+        <i class="icon-chevron-left"></i>
+        Retour à la liste
+    </a>
+    <a href="{{ path('yatblog_modifier', {'id': article.id })}}">
+        <i class="icon-edit"></i>
+        Modifier
+    </a>
+    <a href="{{ path('yatblog_supprimer', {'id': article.id }) }}">
+        <i class="icon-trash"></i>
+        Supprimer l'article
+    </a>
+</p>
+
+{% endblock %}
