@@ -9,6 +9,24 @@ class BlogController extends Controller
 {
     public function indexAction($page)
     {
+        $liste_articles = array(
+                          array( 'id' => 1,
+                                 'titre' => 'harmanthant',
+                                 'auteur' => 'Yoz',
+                                 'date' => new \DateTime(),
+                                 'type' => 'drame'),
+                          array( 'id' => 2,
+                                 'titre' => 'passe',
+                                 'auteur' => 'Yat',
+                                 'date' => new \DateTime(),
+                                 'type' => 'politique'),
+                          array( 'id' => 3,
+                                 'titre' => 'un jour',
+                                 'auteur' => 'Yazik',
+                                 'date' => new \DateTime(),
+                                 'type' => 'aventure')
+                         );
+      
        // on ne sait pas combien de page il y a
        // Mais on sait qu'une page doit être supérieur ou égale à 1
        if($page < 1)
@@ -21,12 +39,29 @@ class BlogController extends Controller
     // Ici, on recupper la liste des articles 
        
        
-        return $this->render('BlogNewBundle:Blog:index.html.twig');
+        return $this->render('BlogNewBundle:Blog:index.html.twig', array('articles' => $liste_articles ));
     }
     public function voirAction($id)
     {
-       // Ici, on recupere l'article correspondant à l'id $id 
-      return $this->render('BlogNewBundle:Blog:voir.html.twig', array('id' => $id ));
+       // Ici, on recupere l'article correspondant à l'id $id
+       $liste_articles = array( 'id' => 1,
+                                 'titre' => 'harmanthant',
+                                 'auteur' => 'Yoz',
+                                 'date' => new \DateTime(),
+                                 'type' => 'drame');
+                          array( 'id' => 2,
+                                 'titre' => 'passe',
+                                 'auteur' => 'Yat',
+                                 'date' => new \DateTime(),
+                                 'type' => 'politique');
+                          array( 'id' => 3,
+                                 'titre' => 'un jour',
+                                 'auteur' => 'Yazik',
+                                 'date' => new \DateTime(),
+                                 'type' => 'aventure');
+                        
+      return $this->render('BlogNewBundle:Blog:voir.html.twig', array('id' => $id,
+                                                                      'article' => $liste_articles));
         
     }
     
@@ -48,16 +83,24 @@ class BlogController extends Controller
             return $this->redirect($this->generateUrl('yatblog_voir', array('id' => 5)));
         }
         
+        
         // Si on n'est pas en POST , alors on affiche le formulaire
         return $this->render('BlogNewBundle:Blog:ajouter.html.twig');    
     }
     public function modifierAction($id)
     {
+        $liste_articles = array(
+                                'id' => 7,
+                                'titre' => 'keria',
+                                'date' => new \DateTime(),
+                                'auteur' => 'wizou');
+        
         //Ici On recupere l'article  correspondant à $id
         
         //Ici, on s'occupe de la gestion et de la création  du formulaire
         
-        return $this->render('BlogNewBundle:Blog:modifier.html.twig');
+        return $this->render('BlogNewBundle:Blog:modifier.html.twig', array('article' => $liste_articles,
+                                                                            ));
     }
     
     public function supprimerAction($id)
@@ -65,6 +108,19 @@ class BlogController extends Controller
         //Ici On recupere l'article  correspondant à $id
         // Ici, On gere la suppression de l'article
         return $this->render('BlogNewBundle:Blog:supprimer.html.twig'); 
+    }
+    
+    public function menuAction()
+    {
+        // on fixe en dur une liste ici,
+        $liste = array(
+          array('id' => 2, 'titre' => 'Mon dernier week-end'),
+          array('id' => 5, 'titre' => 'Sortie de Symfony2'),
+          array('id' => 9, 'titre' => 'Petit test')
+        );
+        return $this->render('BlogNewBundle:Blog:menu.html.twig', array('liste_articles' => $liste
+                                                                        //c'est ici tout l'interêt : le controleur passe les variables au template
+                                                                        ));
     }
     
 }
