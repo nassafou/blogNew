@@ -1,19 +1,3 @@
-/* Elements généraux    */
-
-#menu{
-    width: 234px;
-}
-
-#header{
-    margin-top: 15px;
-}
-
-#content{
-    width: 625px;
-    margin-right: 15px;
-}
-
-#menu, #content{
-    display: inline-block;
-    vertical-align: top;
+body{
+    background-color: lightgreen;
 }

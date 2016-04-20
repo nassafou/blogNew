@@ -5,21 +5,27 @@
 {% block yatblog_body %}
 <h2>{{ article.titre }}</h2>
 <i> Par {{ article.auteur }}, le {{ article.date|date('d/m/Y') }}</i>
-<div class="well">
+<div class="well well-lg">
 {{ article.auteur }}
 </div>
 <p>
     <a href="{{ path('yatblog_accueil')}}" class="btn">
-        <i class="icon-chevron-left"></i>
+        
+            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
         Retour à la liste
+        </span>
     </a>
     <a href="{{ path('yatblog_modifier', {'id': article.id })}}">
-        <i class="icon-edit"></i>
+        <span class="label label-warning">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
         Modifier
+        </span>
     </a>
     <a href="{{ path('yatblog_supprimer', {'id': article.id }) }}">
-        <i class="icon-trash"></i>
-        Supprimer l'article
+        <span class=" label label-danger">
+            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+        Supprimer
+        </span>
     </a>
 </p>
 
