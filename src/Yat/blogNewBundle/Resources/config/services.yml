@@ -2,3 +2,6 @@ services:
 #    blog_new.example:
 #        class: Yat\blogNewBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
+     yat_blognew.antispam:
+         class: Yat\blogNewBundle\Antispam\YatAntispam
+         
