@@ -4,10 +4,26 @@ namespace Yat\blogNewBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
+use Yat\blogNewBundle\Antispam\YatAntispam;
 
 class BlogController extends Controller
 {
-    public function indexAction($page)
+    public function indexAction()
+    {
+        //Déclaration de la variable
+        $text = 'ggg@gmail.com, aaa@gmail.com, pppp@yahoo.fr';
+        // on récupere le service
+        $antispam = $this->container->get('yat_blognew.antispam');
+        
+        // on part sur le principe que $text contient le texte d'un message quelconque
+        if($antispam->isSpam($text)){
+            throw new \Exception('Votre message a été détecté comme spam');
+        }
+        // Le message n'est pas un spam
+    }
+    
+    
+    public function index1Action($page)
     {
         $liste_articles = array(
                           array( 'id' => 1,
