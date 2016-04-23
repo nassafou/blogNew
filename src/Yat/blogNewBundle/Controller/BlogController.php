@@ -8,7 +8,7 @@ use Yat\blogNewBundle\Antispam\YatAntispam;
 
 class BlogController extends Controller
 {
-    public function indexAction()
+    public function index33Action()
     {
         //Déclaration de la variable
         $text = 'ggg@gmail.com, aaa@gmail.com, pppp@yahoo.fr';
