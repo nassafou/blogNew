@@ -36,3 +36,7 @@ yatblog_voir_slug:
 yatblog_ajouter:
     path:     /ajouter
     defaults: { _controller: BlogNewBundle:Blog:ajouter }
+    
+yatblog_test:
+    path:     /test
+    defaults: { _controller: BlogNewBundle:Blog:test }

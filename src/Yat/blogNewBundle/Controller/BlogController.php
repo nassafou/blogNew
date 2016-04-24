@@ -139,4 +139,15 @@ class BlogController extends Controller
                                                                         ));
     }
     
+    public function testAction()
+    {
+        $article = new Article;
+        $article->setDate(new \DateTime()); // date d'aujourd'hui
+        $article->setTitre('Mon dernier Weekend');
+        $article->setAuteur('Bibi');
+        $article->setContenu("c'était vraiment super et on s'est bien amusé");
+        
+        return $this->render('BlogNewBundle:Blog:test.html.twig', array('article' => $article));
+    }
+    
 }
