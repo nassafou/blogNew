@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Image
  *
- * @ORM\Table()
+ * @ORM\Table(name="image")
  * @ORM\Entity(repositoryClass="Yat\blogNewBundle\Entity\ImageRepository")
  */
 class Image
@@ -94,4 +94,3 @@ class Image
         return $this->alt;
     }
 }
-

@@ -66,19 +66,19 @@ class Article
     
     /**
      *
-     * @ORM\OneToOne(targetEntity="Yat\BlogNewBundle\Entity\Image", cascade={"persist", "remove"})
+     * @ORM\OneToOne(targetEntity="Yat\blogNewBundle\Entity\Image", cascade={"persist", "remove"})
      */
     private $image;
 
     /**
      *
-     * @ORM\ManyToMany(targetEntity="Yat\BlogNewBundle\Entity\Categorie", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="Yat\blogNewBundle\Entity\Categorie", cascade={"persist"})
      */
     private $categories;
     
     /**
      *
-     * @ORM\OneToMany(targetEntity="Yat\BlogNewBundle\Entity\Commentaire", mappedBy="article")
+     * @ORM\OneToMany(targetEntity="Yat\blogNewBundle\Entity\Commentaire", mappedBy="article")
      */
     private $commentaires; // Ici commentaires prend un <<s>>, car un article a plusieurs commentaires !
     
