@@ -38,25 +38,29 @@ class BlogController extends Controller
     
     // Ici, on recupper la liste des articles
     // Pour récupérer la liste de tous les articles : on utilise findAll()
-        $articles = $this->getDoctrine()
-                         ->getManager()
-                         ->getRepository('BlogNewBundle:Article')
-                         ->findAll();
+        $em = $this->getDoctrine()
+                         ->getManager();
+                         
+           $article = $em->getRepository('BlogNewBundle:Article')
+                         ->getArticles();
     
       // L'appel de vue ne change pas 
        
        
         return $this->render('BlogNewBundle:Blog:index.html.twig', array('articles' => $articles ));
     }
-    public function voirAction($id)
+    public function voirAction(Article $article)
     {
        // On récupère l'EntityManager
        $em = $this->getDoctrine()
                   ->getManager();
                   
+        $listeArticleCompetence = $em->getRepository('BlogNewBundle:ArticleCompetence')
+                                     ->findByArticle($article->getId());
+                  
         // Pour récupérer un article unique : on utilise find()
-        $article = $em->getRepository('BlogNewBundle:Article')
-                      ->find($id);
+        //$article = $em->getRepository('BlogNewBundle:Article')
+                      //->find($id);
                       
         if($article === null){
             throw $this->createNotFoundException('Article[id='.$id.']inexistant.');
@@ -69,7 +73,7 @@ class BlogController extends Controller
                                       
                                       
       return $this->render('BlogNewBundle:Blog:voir.html.twig', array('article' => $article,
-                                                                      'liste_articleCompetence' => $liste_articleCompetence,
+                                                                      'listeArticleCompetence' => $liste_articleCompetence
                                                                       // Pas besoin de passer les commentaires à la vue, on pourra
                                                                       // y acceder via {{ article.commentaire}}
                                                                       
@@ -99,6 +103,8 @@ class BlogController extends Controller
         // Si on n'est pas en POST , alors on affiche le formulaire
         return $this->render('BlogNewBundle:Blog:ajouter.html.twig');    
     }
+    
+    
     public function modifierAction($id)
     {
         // Recupérer l'entity manager
@@ -149,17 +155,24 @@ class BlogController extends Controller
         return $this->render('BlogNewBundle:Blog:supprimer.html.twig', array( 'article' => $article)); 
     }
     
-    public function menuAction()
-    {
-        // on fixe en dur une liste ici,
-        $liste1 = array(
-          array('id' => 2, 'titre' => 'Mon dernier week-end'),
-          array('id' => 5, 'titre' => 'Sortie de Symfony2'),
-          array('id' => 9, 'titre' => 'Petit test')
-        );
+    public function menuAction($nombre)
+    {   
+        // recupération des entity manager
+        $em = $this->getDoctrine()
+                   ->getManager();
+                //recupération de aticle
+                
+        $liste = $em->getRepository('BlogNewBundle:Article')
+                     ->findBy(
+                        array(), // Pas critère
+                        array('date' => 'desc'), // On trie par date décroissante
+                        $nombre, // on sélectionne $nombre article
+                        0        // A partir premier
+                        
+                        );
         
         //recuperation de l'entity
-        return $this->render('BlogNewBundle:Blog:menu.html.twig', array('liste_articles' => $liste1
+        return $this->render('BlogNewBundle:Blog:menu.html.twig', array('liste_articles' => $liste
                                                                         //c'est ici tout l'interêt : le controleur passe les variables au template
                                                                         ));
     }
