@@ -5,12 +5,12 @@ namespace Yat\blogNewBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Categorie
+ * Competence
  *
- * @ORM\Table(name="categorie")
- * @ORM\Entity(repositoryClass="Yat\blogNewBundle\Entity\CategorieRepository")
+ * @ORM\Table()
+ * @ORM\Entity(repositoryClass="Yat\blogNewBundle\Entity\CompetenceRepository")
  */
-class Categorie
+class Competence
 {
     /**
      * @var integer
@@ -44,7 +44,7 @@ class Categorie
      *
      * @param string $nom
      *
-     * @return Categorie
+     * @return Competence
      */
     public function setNom($nom)
     {

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Commentaire
  *
- * @ORM\Table()
+ * @ORM\Table(name="commentaire")
  * @ORM\Entity(repositoryClass="Yat\blogNewBundle\Entity\CommentaireRepository")
  */
 class Commentaire
@@ -41,6 +41,18 @@ class Commentaire
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     *
+     * @ORM\ManyToOne(targetEntity="Yat\BlogNewBundle\Entity\Article", inversedBy="commentaires")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $article;
+    
+    public function __construct()
+    {
+        $this->date = new \DateTime();
+    }
 
 
     /**
