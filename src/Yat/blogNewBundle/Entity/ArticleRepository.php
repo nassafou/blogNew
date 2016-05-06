@@ -10,4 +10,16 @@ namespace Yat\blogNewBundle\Entity;
  */
 class ArticleRepository extends \Doctrine\ORM\EntityRepository
 {
+    public function getArticles()
+    {
+        $query = $this->createQueryBuilder('a')
+                      ->leftJoin('a.image', 'i')//On joint sur l'attribut image
+                      ->addSelect('i')
+                      ->leftJoint('a.categories', 'c') //On joint l'attribut categorie
+                      ->addSelect('c')
+                      ->orderBy('a.date', 'DESC')
+                      ->getQuery();
+                      
+        return $query->getResult();
+    }
 }
