@@ -136,5 +136,28 @@ class Commentaire
     {
         return $this->date;
     }
-}
 
+    /**
+     * Set article
+     *
+     * @param \Yat\BlogNewBundle\Entity\Article $article
+     *
+     * @return Commentaire
+     */
+    public function setArticle(\Yat\BlogNewBundle\Entity\Article $article)
+    {
+        $this->article = $article;
+
+        return $this;
+    }
+
+    /**
+     * Get article
+     *
+     * @return \Yat\BlogNewBundle\Entity\Article
+     */
+    public function getArticle()
+    {
+        return $this->article;
+    }
+}
