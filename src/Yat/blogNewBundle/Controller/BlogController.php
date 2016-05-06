@@ -23,25 +23,9 @@ class BlogController extends Controller
     }
     
     
-    public function index1Action($page)
+    public function indexAction($page)
     {
-        $liste_articles = array(
-                          array( 'id' => 1,
-                                 'titre' => 'harmanthant',
-                                 'auteur' => 'Yoz',
-                                 'date' => new \DateTime(),
-                                 'type' => 'drame'),
-                          array( 'id' => 2,
-                                 'titre' => 'passe',
-                                 'auteur' => 'Yat',
-                                 'date' => new \DateTime(),
-                                 'type' => 'politique'),
-                          array( 'id' => 3,
-                                 'titre' => 'un jour',
-                                 'auteur' => 'Yazik',
-                                 'date' => new \DateTime(),
-                                 'type' => 'aventure')
-                         );
+        
       
        // on ne sait pas combien de page il y a
        // Mais on sait qu'une page doit être supérieur ou égale à 1
@@ -52,32 +36,44 @@ class BlogController extends Controller
         throw $this->createNotFoundException('Page inexistante (page = '.$page.')');
        }
     
-    // Ici, on recupper la liste des articles 
+    // Ici, on recupper la liste des articles
+    // Pour récupérer la liste de tous les articles : on utilise findAll()
+        $articles = $this->getDoctrine()
+                         ->getManager()
+                         ->getRepository('BlogNewBundle:Article')
+                         ->findAll();
+    
+      // L'appel de vue ne change pas 
        
        
-        return $this->render('BlogNewBundle:Blog:index.html.twig', array('articles' => $liste_articles ));
+        return $this->render('BlogNewBundle:Blog:index.html.twig', array('articles' => $articles ));
     }
     public function voirAction($id)
     {
-       // Ici, on recupere l'article correspondant à l'id $id
-       $liste_articles = array( 'id' => 1,
-                                 'titre' => 'harmanthant',
-                                 'auteur' => 'Yoz',
-                                 'date' => new \DateTime(),
-                                 'type' => 'drame');
-                          array( 'id' => 2,
-                                 'titre' => 'passe',
-                                 'auteur' => 'Yat',
-                                 'date' => new \DateTime(),
-                                 'type' => 'politique');
-                          array( 'id' => 3,
-                                 'titre' => 'un jour',
-                                 'auteur' => 'Yazik',
-                                 'date' => new \DateTime(),
-                                 'type' => 'aventure');
-                        
-      return $this->render('BlogNewBundle:Blog:voir.html.twig', array('id' => $id,
-                                                                      'article' => $liste_articles));
+       // On récupère l'EntityManager
+       $em = $this->getDoctrine()
+                  ->getManager();
+                  
+        // Pour récupérer un article unique : on utilise find()
+        $article = $em->getRepository('BlogNewBundle:Article')
+                      ->find($id);
+                      
+        if($article === null){
+            throw $this->createNotFoundException('Article[id='.$id.']inexistant.');
+                      
+        }
+        
+        // On recupere les articleCompetence pour l'article
+        $liste_articleCompetence = $em->getRepository('BlogNewBundle:ArticleCompetence')
+                                      ->findByArticle($article->getId());
+                                      
+                                      
+      return $this->render('BlogNewBundle:Blog:voir.html.twig', array('article' => $article,
+                                                                      'liste_articleCompetence' => $liste_articleCompetence,
+                                                                      // Pas besoin de passer les commentaires à la vue, on pourra
+                                                                      // y acceder via {{ article.commentaire}}
+                                                                      
+                                                                      ));
         
     }
     
@@ -105,36 +101,65 @@ class BlogController extends Controller
     }
     public function modifierAction($id)
     {
-        $liste_articles = array(
-                                'id' => 7,
-                                'titre' => 'keria',
-                                'date' => new \DateTime(),
-                                'auteur' => 'wizou');
+        // Recupérer l'entity manager
+        $em = $this->getDoctrine()
+                   ->getManager();
         
-        //Ici On recupere l'article  correspondant à $id
+         //Ici On recupere l'article  correspondant à $id              
+        $article = $em->getRepository('BlogNewBundle:Article')
+                                    ->find($id);
+                      
+        // Si l'article n'existe pas
+        if( $article == null ){
+            throw $this->createNotFoundException('Article[id='.$id.'] inexistant');
+        }
+        
+       
         
         //Ici, on s'occupe de la gestion et de la création  du formulaire
         
-        return $this->render('BlogNewBundle:Blog:modifier.html.twig', array('article' => $liste_articles,
+        return $this->render('BlogNewBundle:Blog:modifier.html.twig', array('article' => $article,
                                                                             ));
     }
     
     public function supprimerAction($id)
     {
+        // on recupere l'entity manager
+        $em = $this->getDoctrine()
+                   ->getManager();
+                   
         //Ici On recupere l'article  correspondant à $id
+        $article = $this->getRepository('BlogNewBundle:Article')
+                        ->find($id);
+                        
+        // Si l'article n'existe pas, on affiche une erreur 404
+        if ( $article == null ){
+            throw $this->createNotFoundException('Article[id='.$id.']inexistant');
+        }
+        
+        if($this->get('request')->getMethod() == 'POST'){
+            // Si la requete est en POST, on supprimera l'article
+            $this->get('session')->getFlashBag()->add('info', 'Article bien supprimé');
+            // Puis on redirige vers l'accueil
+            return $this->redirect($this->generateUrl('yatblogNew_accueil'));
+        }
+        
+        // Si la requete est en GET, on affiche une page de confirmation avant de supprimer
         // Ici, On gere la suppression de l'article
-        return $this->render('BlogNewBundle:Blog:supprimer.html.twig'); 
+        return $this->render('BlogNewBundle:Blog:supprimer.html.twig', array( 'article' => $article)); 
     }
     
     public function menuAction()
     {
         // on fixe en dur une liste ici,
-        $liste = array(
+        $liste1 = array(
           array('id' => 2, 'titre' => 'Mon dernier week-end'),
           array('id' => 5, 'titre' => 'Sortie de Symfony2'),
           array('id' => 9, 'titre' => 'Petit test')
         );
-        return $this->render('BlogNewBundle:Blog:menu.html.twig', array('liste_articles' => $liste
+        
+        //recuperation de l'entity
+        return $this->render('BlogNewBundle:Blog:menu.html.twig', array('liste_articles' => $liste1
                                                                         //c'est ici tout l'interêt : le controleur passe les variables au template
                                                                         ));
     }
