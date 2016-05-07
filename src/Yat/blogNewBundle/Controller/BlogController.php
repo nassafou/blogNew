@@ -27,14 +27,18 @@ class BlogController extends Controller
         $em = $this->getDoctrine()->getManager();// recupération de l'entity manager
         $articles = $em->getRepository('BlogNewBundle:Article')
                        ->getArticles(3, $page); // 3 articles par page : C'est totalement arbitre!
-                       
-  
-  
+           
+          
+          //On ajoute ici les variables page et nb_page à la vue
+           return $this->render('BlogNewBundle:Blog:index.html.twig',
+                                array(
+                                      'articles' => $articles,
+                                      'page'     => $page,
+                                      'nombrePage' => ceil(count($articles)/3)
+                                      ));            
     }
     public function index22Action($page)
     {
-        
-      
        // on ne sait pas combien de page il y a
        // Mais on sait qu'une page doit être supérieur ou égale à 1
        if($page < 1)
@@ -51,10 +55,7 @@ class BlogController extends Controller
                          
            $article = $em->getRepository('BlogNewBundle:Article')
                          ->getArticles();
-    
       // L'appel de vue ne change pas 
-       
-       
         return $this->render('BlogNewBundle:Blog:index.html.twig', array('articles' => $articles ));
     }
     public function voirAction(Article $article)
