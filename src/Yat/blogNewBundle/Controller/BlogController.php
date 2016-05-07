@@ -22,8 +22,16 @@ class BlogController extends Controller
         // Le message n'est pas un spam
     }
     
-    
     public function indexAction($page)
+    {
+        $em = $this->getDoctrine()->getManager();// recupération de l'entity manager
+        $articles = $em->getRepository('BlogNewBundle:Article')
+                       ->getArticles(3, $page); // 3 articles par page : C'est totalement arbitre!
+                       
+  
+  
+    }
+    public function index22Action($page)
     {
         
       

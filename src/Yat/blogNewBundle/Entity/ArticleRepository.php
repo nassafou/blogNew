@@ -2,6 +2,9 @@
 
 namespace Yat\blogNewBundle\Entity;
 
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+
 /**
  * ArticleRepository
  *
@@ -15,11 +18,17 @@ class ArticleRepository extends \Doctrine\ORM\EntityRepository
         $query = $this->createQueryBuilder('a')
                       ->leftJoin('a.image', 'i')//On joint sur l'attribut image
                       ->addSelect('i')
-                      ->leftJoint('a.categories', 'c') //On joint l'attribut categorie
+                      ->leftJoin('a.categories', 'c') //On joint l'attribut categorie
                       ->addSelect('c')
                       ->orderBy('a.date', 'DESC')
                       ->getQuery();
                       
-        return $query->getResult();
+        
+        $query->setFirstResult(($page-1) *  $nombreParPage) // On definit l'article à partir du quel commencer la liste
+              ->setMaxResultats($nombreParPage); // Ainsi que le nombre  d'articles à afficher
+              
+              
+          return new Paginator($query);            
+        //return $query->getResult();
     }
 }
