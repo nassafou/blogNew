@@ -2,12 +2,11 @@
 {% block title %}
     Lecture d'un article - {{ parent() }}
 {% endblock %}
+
 {% block yatblog_body %}
-<h2>{{ article.titre }}</h2>
-<i> Par {{ article.auteur }}, le {{ article.date|date('d/m/Y') }}</i>
-<div class="well well-lg">
-{{ article.auteur }}
-</div>
+    {# Ici, on inclut la vue #}
+    {% include "BlogNewBundle:Blog:article.html.twig" %}
+
 <p>
     <a href="{{ path('yatblog_accueil')}}" class="btn">
         

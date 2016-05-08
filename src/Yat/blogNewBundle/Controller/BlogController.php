@@ -5,6 +5,7 @@ namespace Yat\blogNewBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Yat\blogNewBundle\Antispam\YatAntispam;
+use Yat\blogNewBundle\Entity\Article;
 
 class BlogController extends Controller
 {
@@ -99,18 +100,52 @@ class BlogController extends Controller
     // ajouter cette methode a ajouterAction
      public function ajouterAction()
     {
-        // La gestion de formulaire
-        if($this->get('request')->getMethod() == 'POST')
-        {
-            // Ici, on s'occupera de la création et de la gestion du formulaire
-            $this->get('session')->getFlashBag()->add('notice', 'Article bien enregistré');
-            // Puis on redirige vers la page de visualisation
-            return $this->redirect($this->generateUrl('yatblog_voir', array('id' => 5)));
-        }
+        //On crée un objet Article
+        $article = new Article();
+        //On crée le FormBuilder grace à la methode du controleur
+        $formBuilder  = $this->createFormBuilder($article);
         
+        // on ajoute les champs de l'entité de l'entité que l'on veut à notre formulaire
+        $formBuilder
+           ->add('date',   'date')
+           ->add('titre',  'text')
+           ->add('contenu', 'textarea')
+           ->add('auteur',  'text')
+           ->add('publication', 'checkbox', array('required' => false ))
+           ->getForm();
+           
+           $request = $this->get('request'); // on recupere la requete
+           
+           // On vérifie qu'elle est de type POST
+           if( $request->getMethod() == 'POST')
+           {
+            //On fait le lien Requet<-> Formulaire
+            //Après la variable $article contient les valeurs entrées dans le formulaire par le visiteur
+            $form->bind($request);
+            
+            // On verifie que les valeurs entrées sont correctes
+            // Nous verrons la validation des objects en detail
+            if($form->isValid()){
+                // On l'enrégistre notre objet $article dans la base de données
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($article);
+                $em->flush();
+                
+                // On redirige vers la page de visualisation de l'article nouvellement crée
+                 return $this ->redirect($this->generateUrl('yatblog_voir', array('id' => $article->getId()))); 
+            }
+           }
+           
+           // A ce stade :
+           // - Soit la requete est de type GET, donc le visiteur vient d'arriver sur la page et veut voir le formulaire
+           // -Soit la requete est de type POST, mais le formulaire n'est pas valide, donc on l'affiche de nouveau
+           
+           
+           // A partir du formBuilder, on génère le formulaire
+           $form = $formBuilder->getForm();
         
         // Si on n'est pas en POST , alors on affiche le formulaire
-        return $this->render('BlogNewBundle:Blog:ajouter.html.twig');    
+        return $this->render('BlogNewBundle:Blog:ajouter.html.twig', array( 'form' => $form->createView(),));    
     }
     
     
