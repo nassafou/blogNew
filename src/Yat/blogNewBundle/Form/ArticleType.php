@@ -6,6 +6,9 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
+use Symfony\Component\Form\FormEvents;
+use Symfony\Compenent\Form\FormEvent;
+
 
 class ArticleType extends AbstractType
 {
@@ -28,10 +31,10 @@ class ArticleType extends AbstractType
          ** - 2e argument : type du champ, ici << collection >> qui est une liste de quelque chose
          ** - 3e argument : tableau d'options du champ
          */
-        ->add('categories', 'collection', array(
-                                                'type' => new CategorieType(),
-                                                'allow_add' => true,
-                                                'allow_delete' => true ))
+        ->add('categories', 'entity', array(
+                                                'class' => 'BlogNewBundle:Categorie',
+                                                'property' => 'nom',
+                                                'multiple' => true ))
         ;
     
     }
