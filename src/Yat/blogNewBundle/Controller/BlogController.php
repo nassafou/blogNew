@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Yat\blogNewBundle\Antispam\YatAntispam;
 use Yat\blogNewBundle\Entity\Article;
+use Yat\blogNewBundle\Form\ArticleType;
 
 class BlogController extends Controller
 {
@@ -100,19 +101,21 @@ class BlogController extends Controller
     // ajouter cette methode a ajouterAction
      public function ajouterAction()
     {
-        //On crée un objet Article
-        $article = new Article();
+        $article = new Article();//On crée un objet Article
         //On crée le FormBuilder grace à la methode du controleur
-        $formBuilder  = $this->createFormBuilder($article);
+        //$formBuilder  = $this->createFormBuilder($article);
         
         // on ajoute les champs de l'entité de l'entité que l'on veut à notre formulaire
-        $formBuilder
-           ->add('date',   'date')
-           ->add('titre',  'text')
-           ->add('contenu', 'textarea')
-           ->add('auteur',  'text')
-           ->add('publication', 'checkbox', array('required' => false ))
-           ->getForm();
+        //$formBuilder
+           //->add('date',   'date')
+           //->add('titre',  'text')
+           //->add('contenu', 'textarea')
+           //->add('auteur',  'text')
+           //->add('publication', 'checkbox', array('required' => false ))
+           //->getForm();
+           
+           $form = $this->createForm(new ArticleType, $article);
+           
            
            $request = $this->get('request'); // on recupere la requete
            
@@ -142,7 +145,7 @@ class BlogController extends Controller
            
            
            // A partir du formBuilder, on génère le formulaire
-           $form = $formBuilder->getForm();
+          // $form = $formBuilder->getForm();
         
         // Si on n'est pas en POST , alors on affiche le formulaire
         return $this->render('BlogNewBundle:Blog:ajouter.html.twig', array( 'form' => $form->createView(),));    
